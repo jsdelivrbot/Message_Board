@@ -1,0 +1,46 @@
+.title {
+  text-align: center;
+  font-size: 100px;
+}
+
+.undone {
+  font-size: 50px;
+  color: red;
+}
+
+.done {
+  font-size: 50px;
+  color: green;
+}
+
+.list {
+  margin: 27px;
+  height: auto;
+  align-items: center;
+  text-align: center;
+  border: solid 2px black;
+  border-radius: 9px;
+  background-color: #eee;
+}
+
+.list:hover {
+  background-color: #d4d4d4;
+}
+
+.dec {
+  margin-top: 15px;
+  padding-bottom: 30px;
+}
+
+.modi {
+  margin: 17px;
+}
+
+.item:hover {
+  background-color: #38cbff;
+  border-radius: 9px;
+}
+
+.add {
+  margin-left: 100px;
+}
