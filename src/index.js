@@ -23,18 +23,11 @@ class App extends Component {
     this.setState({ todoLists: newTodoLists });
   }
 
-  deleteTodoList(key) {
-    this.setState({ todoLists: _.omit(this.state.todoLists, key) });
-  }
-
   render() {
     return (
       <div>
         <AddBar addTodoList={this.addTodoList.bind(this)} />
-        <CommentGroup
-          todoLists={this.state.todoLists}
-          deleteTodoList={this.deleteTodoList.bind(this)}
-        />
+        <CommentGroup todoLists={this.state.todoLists} />
       </div>
     );
   }

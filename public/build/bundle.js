@@ -105,21 +105,13 @@
 	      this.setState({ todoLists: newTodoLists });
 	    }
 	  }, {
-	    key: 'deleteTodoList',
-	    value: function deleteTodoList(key) {
-	      this.setState({ todoLists: _.omit(this.state.todoLists, key) });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_addBar2.default, { addTodoList: this.addTodoList.bind(this) }),
-	        _react2.default.createElement(_commentGroup2.default, {
-	          todoLists: this.state.todoLists,
-	          deleteTodoList: this.deleteTodoList.bind(this)
-	        })
+	        _react2.default.createElement(_commentGroup2.default, { todoLists: this.state.todoLists })
 	      );
 	    }
 	  }]);
@@ -19945,11 +19937,6 @@
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-md-12 title' },
-	          'TODOS'
-	        ),
-	        _react2.default.createElement(
-	          'div',
 	          { className: 'col-md-12' },
 	          _react2.default.createElement(
 	            'form',
@@ -19959,15 +19946,15 @@
 	              className: 'form-control',
 	              value: this.state.term,
 	              onChange: this.onInputChange.bind(this),
-	              placeholder: 'input todo-list title'
+	              placeholder: 'input comment'
 	            }),
 	            _react2.default.createElement(
 	              'span',
 	              { className: 'input-group-btn' },
 	              _react2.default.createElement(
 	                'button',
-	                { type: 'submit', className: 'btn btn-primary' },
-	                'Add List'
+	                { type: 'submit', className: 'btn btn-secondary' },
+	                'Comment'
 	              )
 	            )
 	          )
@@ -20016,71 +20003,26 @@
 	var CommentGroup = function (_Component) {
 	  _inherits(CommentGroup, _Component);
 
-	  function CommentGroup(props) {
+	  function CommentGroup() {
 	    _classCallCheck(this, CommentGroup);
 
-	    var _this = _possibleConstructorReturn(this, (CommentGroup.__proto__ || Object.getPrototypeOf(CommentGroup)).call(this, props));
-
-	    _this.state = { sum: 0, reRender: false };
-	    return _this;
+	    return _possibleConstructorReturn(this, (CommentGroup.__proto__ || Object.getPrototypeOf(CommentGroup)).apply(this, arguments));
 	  }
 
 	  _createClass(CommentGroup, [{
-	    key: 'deleteTodoList',
-	    value: function deleteTodoList(key) {
-	      this.props.deleteTodoList(key);
-	    }
-	  }, {
-	    key: 'reRender',
-	    value: function reRender() {
-	      this.setState({ reRender: true, sum: 0 });
-	    }
-	  }, {
-	    key: 'getCount',
-	    value: function getCount(number) {
-	      this.setState({ sum: number + this.state.sum });
-	    }
-	  }, {
 	    key: 'renderTodoLists',
 	    value: function renderTodoLists() {
-	      var _this2 = this;
-
 	      return _lodash2.default.map(this.props.todoLists, function (list) {
-	        return _react2.default.createElement(_mainComment2.default, {
-	          todoList: list,
-	          deleteList: _this2.deleteTodoList.bind(_this2),
-	          sendBack: _this2.getCount.bind(_this2),
-	          reRender: _this2.reRender.bind(_this2),
-	          key: list.key
-	        });
+	        return _react2.default.createElement(_mainComment2.default, { todoList: list, key: list.key });
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.state.sum);
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-12' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-md-6 done' },
-	            'Finished:'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-md-6 undone' },
-	            'Unfinished:'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-md-12' },
-	          this.renderTodoLists()
-	        )
+	        { className: 'col-md-12' },
+	        this.renderTodoLists()
 	      );
 	    }
 	  }]);
@@ -32497,7 +32439,6 @@
 	    var _this = _possibleConstructorReturn(this, (MainComment.__proto__ || Object.getPrototypeOf(MainComment)).call(this, props));
 
 	    _this.state = { term: '' };
-	    _this.count = _this.count.bind(_this);
 	    return _this;
 	  }
 
@@ -32511,105 +32452,57 @@
 	    value: function onFormSubmit(event) {
 	      event.preventDefault();
 	      if (this.state.term !== '') {
-	        this.props.todoList.title = this.state.term;
+	        var newListItem = { key: (0, _uniqid2.default)('IDL'), title: this.state.term };
+	        this.props.todoList.content = _extends({}, this.props.todoList.content, _defineProperty({}, newListItem.key, newListItem));
 	        this.setState({ term: '' });
 	      }
 	    }
 	  }, {
-	    key: 'onItemSubmit',
-	    value: function onItemSubmit(event) {
-	      event.preventDefault();
-	      var newListItem = { key: (0, _uniqid2.default)('IDL') };
-	      this.props.todoList.content = _extends({}, this.props.todoList.content, _defineProperty({}, newListItem.key, newListItem));
-	      this.count();
-	      this.setState({ term: '' });
-	    }
-	  }, {
-	    key: 'onDeleteClick',
-	    value: function onDeleteClick() {
-	      this.props.deleteList(this.props.todoList.key);
-	      this.props.todoList.content = {};
-	      this.count();
-	    }
-	  }, {
-	    key: 'count',
-	    value: function count() {
-	      this.props.reRender();
-	      this.props.sendBack(Object.keys(this.props.todoList.content).length);
-	    }
-	  }, {
-	    key: 'deleteListItem',
-	    value: function deleteListItem(key) {
-	      this.props.todoList.content = _lodash2.default.omit(this.props.todoList.content, key);
-	      this.count();
-	      this.setState({ term: '' });
-	    }
-	  }, {
 	    key: 'renderListItems',
 	    value: function renderListItems() {
-	      var _this2 = this;
-
 	      return _lodash2.default.map(this.props.todoList.content, function (item) {
-	        return _react2.default.createElement(_minorComment2.default, {
-	          item: item,
-	          key: item.key,
-	          deleteListItem: _this2.deleteListItem.bind(_this2)
-	        });
+	        return _react2.default.createElement(_minorComment2.default, { item: item, key: item.key });
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var todoList = this.props.todoList;
-
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'col-md-5 list' },
+	        { className: 'list col-md-10' },
 	        _react2.default.createElement(
-	          'form',
-	          { className: 'form-group dec', onSubmit: this.onFormSubmit.bind(this) },
+	          'div',
+	          { className: 'col-md-7' },
 	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-xs-6 name' },
-	            _react2.default.createElement(
-	              'h3',
-	              null,
-	              this.props.todoList.title
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-xs-6 pull-xs-right' },
-	            _react2.default.createElement('input', {
-	              className: 'form-control',
-	              type: 'text',
-	              value: this.state.term,
-	              placeholder: 'edit list title',
-	              onChange: this.onInputChange.bind(this)
-	            })
+	            'p',
+	            null,
+	            this.props.todoList.title
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'col-md-7' },
 	          this.renderListItems()
 	        ),
 	        _react2.default.createElement(
 	          'form',
-	          { onSubmit: this.onItemSubmit.bind(this), className: 'input-group' },
+	          { className: 'input-group col-md-7', onSubmit: this.onFormSubmit.bind(this) },
+	          _react2.default.createElement('input', {
+	            className: 'form-control modi',
+	            type: 'text',
+	            value: this.state.term,
+	            placeholder: 'input reply',
+	            onChange: this.onInputChange.bind(this)
+	          }),
 	          _react2.default.createElement(
-	            'button',
-	            { type: 'submit', className: 'btn btn-info add' },
-	            '\uFF0B'
+	            'span',
+	            { className: 'input-group-btn' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit', className: 'btn btn-secondary' },
+	              'Reply'
+	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            onClick: this.onDeleteClick.bind(this),
-	            className: 'btn btn-warning pull-xs-right modi'
-	          },
-	          'Delete List'
 	        )
 	      );
 	    }
@@ -32624,13 +32517,11 @@
 /* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
 
@@ -32638,73 +32529,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var MinorComment = function MinorComment(_ref) {
+	  var item = _ref.item;
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var MinorComment = function (_Component) {
-	  _inherits(MinorComment, _Component);
-
-	  function MinorComment(props) {
-	    _classCallCheck(this, MinorComment);
-
-	    var _this = _possibleConstructorReturn(this, (MinorComment.__proto__ || Object.getPrototypeOf(MinorComment)).call(this, props));
-
-	    _this.state = { term: '' };
-	    return _this;
-	  }
-
-	  _createClass(MinorComment, [{
-	    key: 'onInputChange',
-	    value: function onInputChange(event) {
-	      this.setState({ term: event.target.value });
-	    }
-	  }, {
-	    key: 'onDeleteClick',
-	    value: function onDeleteClick() {
-	      this.props.deleteListItem(this.props.item.key);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'modi item' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-xs-1' },
-	          _react2.default.createElement('input', {
-	            type: 'checkbox',
-	            className: 'checkbox-inline'
-	          })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'col-xs-8' },
-	          _react2.default.createElement('input', {
-	            type: 'text',
-	            className: 'form-control',
-	            placeholder: 'input item name',
-	            value: this.state.term,
-	            onChange: this.onInputChange.bind(this)
-	          })
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            className: 'btn btn-danger',
-	            onClick: this.onDeleteClick.bind(this)
-	          },
-	          'X'
-	        )
-	      );
-	    }
-	  }]);
-
-	  return MinorComment;
-	}(_react.Component);
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "kid" },
+	    _react2.default.createElement(
+	      "p",
+	      null,
+	      item.title
+	    )
+	  );
+	};
 
 	exports.default = MinorComment;
 

@@ -7,7 +7,7 @@ module.exports = (app) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.post('/api/mainmessage', (req, res) => {
+  app.post('/api/newma', (req, res) => {
     const newMessage = Messages({
       id: generateID(),
       mComment: req.body.mCommment,
