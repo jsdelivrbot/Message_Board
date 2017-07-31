@@ -30,7 +30,11 @@
   },
   "dependencies": {
     "babel-preset-stage-1": "^6.1.18",
+    "body-parser": "^1.17.2",
+    "ejs": "^2.5.7",
+    "express": "^4.15.3",
     "lodash": "^3.10.1",
+    "mongoose": "^4.11.5",
     "path": "^0.12.7",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
