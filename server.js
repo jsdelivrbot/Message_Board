@@ -13,7 +13,7 @@ mongoose.connect(config.getDbConnectionString());
 setupController(app);
 apiController(app);
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.set('view engine', 'ejs');
 
@@ -22,5 +22,4 @@ app.get('/', (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port);
-console.log('Server Running');
+app.listen(port, () => console.log('Server Running'));
